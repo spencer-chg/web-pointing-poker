@@ -76,6 +76,7 @@ st.markdown("""
     .stButton > button {
         background-color: #4A6B4D !important;
         color: white !important;
+        -webkit-text-fill-color: white !important;
         border: none !important;
         border-radius: 10px !important;
         padding: 10px 18px !important;
@@ -91,21 +92,28 @@ st.markdown("""
 
     .stButton > button:hover {
         background-color: #3D5A40 !important;
+        color: white !important;
+        -webkit-text-fill-color: white !important;
         border: none !important;
     }
 
     .stButton > button:active {
         background-color: #324A34 !important;
+        color: white !important;
+        -webkit-text-fill-color: white !important;
     }
 
     /* Secondary buttons - light with dark text */
     .stButton > button[kind="secondary"] {
         background-color: #E8EBE8 !important;
-        color: #3D3D3D !important;
+        color: #2D2D2D !important;
+        -webkit-text-fill-color: #2D2D2D !important;
     }
 
     .stButton > button[kind="secondary"]:hover {
         background-color: #DCDCDC !important;
+        color: #2D2D2D !important;
+        -webkit-text-fill-color: #2D2D2D !important;
     }
 
     /* Vote buttons in columns - fill their column */
@@ -116,6 +124,11 @@ st.markdown("""
         font-size: 14px !important;
         font-weight: 600 !important;
         height: 38px !important;
+        -webkit-text-fill-color: inherit !important;
+    }
+
+    [data-testid="column"] .stButton > button[kind="secondary"] {
+        -webkit-text-fill-color: #2D2D2D !important;
     }
 
     /* Leave session - subtle text style */
@@ -146,12 +159,17 @@ st.markdown("""
         background: transparent !important;
         border: none !important;
         box-shadow: none !important;
+        color: #2D2D2D !important;
+        -webkit-text-fill-color: #2D2D2D !important;
     }
 
-    /* Style only the actual input */
-    .stTextInput input {
+    /* Style only the actual input - all states */
+    .stTextInput input,
+    .stTextInput input:focus,
+    .stTextInput input:active,
+    .stTextInput input:hover {
         background-color: #FFFFFF !important;
-        color: #3D3D3D !important;
+        color: #2D2D2D !important;
         border: 1.5px solid #D8D6D1 !important;
         border-radius: 10px !important;
         padding: 10px 12px !important;
@@ -160,15 +178,18 @@ st.markdown("""
         height: 42px !important;
         box-sizing: border-box !important;
         width: 100% !important;
+        -webkit-text-fill-color: #2D2D2D !important;
+        caret-color: #2D2D2D !important;
     }
 
     .stTextInput input::placeholder {
-        color: #A8A8A8 !important;
+        color: #888888 !important;
+        -webkit-text-fill-color: #888888 !important;
         opacity: 1 !important;
     }
 
     .stTextInput input:focus {
-        border-color: #A8B8A6 !important;
+        border-color: #4A6B4D !important;
         outline: none !important;
         box-shadow: none !important;
     }
