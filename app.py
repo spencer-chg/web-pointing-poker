@@ -410,17 +410,6 @@ if 'is_observer' not in st.session_state:
 if 'last_username' not in st.session_state:
     st.session_state.last_username = ""
 
-# Check URL params for session persistence
-query_params = st.query_params
-if st.session_state.current_session is None and 'session' in query_params and 'user' in query_params:
-    code = query_params['session']
-    username = query_params['user']
-    is_obs = query_params.get('observer', 'false') == 'true'
-    # Verify session still exists and rejoin
-    if session_exists(code):
-        # Rejoin the session
-        join_session(code, username, is_obs)
-
 # Voting options
 VOTE_OPTIONS = ["0.5", "1", "2", "3", "5", "8", "13", "?"]
 
@@ -555,6 +544,15 @@ def calculate_stats(votes):
         'consensus': consensus,
         'consensus_class': consensus_class
     }
+
+# Check URL params for session persistence (must be after function definitions)
+query_params = st.query_params
+if st.session_state.current_session is None and 'session' in query_params and 'user' in query_params:
+    code = query_params['session']
+    username = query_params['user']
+    is_obs = query_params.get('observer', 'false') == 'true'
+    if session_exists(code):
+        join_session(code, username, is_obs)
 
 # ========== MAIN APP ==========
 
