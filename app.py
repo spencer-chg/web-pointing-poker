@@ -6,12 +6,12 @@ import statistics
 
 # Page config
 st.set_page_config(
-    page_title="Pointing Poker",
+    page_title="Nubs x Claude",
     page_icon="✦",
     layout="centered"
 )
 
-# Apple-inspired design system
+# Soft, warm design system
 st.markdown("""
     <style>
     @import url('https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600&display=swap');
@@ -20,206 +20,217 @@ st.markdown("""
         font-family: 'Inter', -apple-system, BlinkMacSystemFont, sans-serif;
     }
 
+    .stApp {
+        background-color: #FAF9F7;
+    }
+
     .main {
-        background-color: #FAFAFA;
-        max-width: 600px;
+        background-color: #FAF9F7;
+        max-width: 480px;
         margin: 0 auto;
     }
 
     .block-container {
-        padding-top: 2rem;
-        padding-bottom: 2rem;
-        max-width: 540px;
+        padding-top: 3rem;
+        padding-bottom: 3rem;
+        max-width: 480px;
     }
 
     h1 {
         font-weight: 600;
-        font-size: 1.75rem;
-        color: #1D1D1F;
+        font-size: 1.5rem;
+        color: #3D3D3D;
         text-align: center;
         letter-spacing: -0.02em;
+        margin-bottom: 0.25rem;
     }
 
     h2, h3 {
         font-weight: 600;
-        color: #1D1D1F;
+        color: #3D3D3D;
         letter-spacing: -0.01em;
     }
 
     .stButton>button {
-        background-color: #007AFF;
+        background-color: #7D9F85;
         color: white;
         border: none;
-        border-radius: 12px;
-        padding: 12px 24px;
+        border-radius: 10px;
+        padding: 10px 20px;
         font-weight: 500;
-        font-size: 15px;
+        font-size: 14px;
         letter-spacing: -0.01em;
         transition: all 0.2s ease;
-        box-shadow: 0 1px 3px rgba(0, 122, 255, 0.2);
+        box-shadow: 0 1px 2px rgba(125, 159, 133, 0.15);
     }
 
     .stButton>button:hover {
-        background-color: #0066D6;
-        transform: translateY(-1px);
-        box-shadow: 0 4px 12px rgba(0, 122, 255, 0.25);
-    }
-
-    .stButton>button:active {
-        transform: translateY(0);
+        background-color: #6B8C73;
+        box-shadow: 0 2px 8px rgba(125, 159, 133, 0.2);
     }
 
     .stButton>button[kind="secondary"] {
-        background-color: #F5F5F7;
-        color: #1D1D1F;
+        background-color: #EFEEE9;
+        color: #3D3D3D;
         box-shadow: none;
     }
 
     .stButton>button[kind="secondary"]:hover {
-        background-color: #E8E8ED;
+        background-color: #E5E4DF;
     }
 
     /* Session code display */
     .session-code {
-        background: linear-gradient(135deg, #667eea 0%, #764ba2 100%);
+        background: linear-gradient(135deg, #C4B7D0 0%, #A8C0C9 100%);
         color: white;
-        padding: 16px 24px;
-        border-radius: 16px;
-        font-size: 20px;
+        padding: 14px 20px;
+        border-radius: 12px;
+        font-size: 18px;
         font-weight: 600;
         text-align: center;
-        letter-spacing: 4px;
-        margin: 24px auto;
-        max-width: 280px;
-        box-shadow: 0 4px 20px rgba(102, 126, 234, 0.3);
+        letter-spacing: 3px;
+        margin: 20px auto;
+        max-width: 240px;
+        box-shadow: 0 2px 12px rgba(196, 183, 208, 0.25);
     }
 
     /* Participant badges */
     .participant-list {
         display: flex;
         flex-wrap: wrap;
-        gap: 8px;
+        gap: 6px;
         justify-content: center;
-        margin: 16px 0;
+        margin: 12px 0;
     }
 
     .user-badge {
         display: inline-flex;
         align-items: center;
-        gap: 6px;
-        padding: 8px 14px;
-        border-radius: 20px;
+        gap: 5px;
+        padding: 6px 12px;
+        border-radius: 16px;
         font-weight: 500;
-        font-size: 14px;
+        font-size: 13px;
         letter-spacing: -0.01em;
     }
 
     .user-badge.voted {
-        background-color: #E8F5E9;
-        color: #2E7D32;
+        background-color: #E8EFE9;
+        color: #6B8C73;
     }
 
     .user-badge.waiting {
-        background-color: #F5F5F7;
-        color: #86868B;
+        background-color: #EFEEE9;
+        color: #9C9C9C;
     }
 
     .user-badge.observer {
-        background-color: #E3F2FD;
-        color: #1565C0;
+        background-color: #E8EEF2;
+        color: #7A9AAA;
     }
 
     /* Stats card */
     .stats-card {
         background: white;
-        border-radius: 16px;
-        padding: 24px;
-        box-shadow: 0 2px 12px rgba(0, 0, 0, 0.06);
-        margin: 20px 0;
+        border-radius: 12px;
+        padding: 16px;
+        box-shadow: 0 1px 4px rgba(0, 0, 0, 0.04);
+        margin: 8px 0;
         text-align: center;
+        border: 1px solid #F0EFEA;
     }
 
     .stat-value {
-        font-size: 32px;
+        font-size: 24px;
         font-weight: 600;
-        color: #1D1D1F;
-        margin-bottom: 4px;
+        color: #3D3D3D;
+        margin-bottom: 2px;
     }
 
     .stat-label {
-        font-size: 13px;
-        color: #86868B;
+        font-size: 11px;
+        color: #9C9C9C;
         text-transform: uppercase;
-        letter-spacing: 0.05em;
+        letter-spacing: 0.04em;
     }
 
     /* Consensus indicators */
     .consensus-high {
-        color: #34C759;
+        color: #7D9F85;
         font-weight: 600;
     }
 
     .consensus-medium {
-        color: #FF9500;
+        color: #C9AA6A;
         font-weight: 600;
     }
 
     .consensus-low {
-        color: #FF3B30;
+        color: #C99A8E;
         font-weight: 600;
     }
 
     /* Vote results */
     .vote-result {
         display: inline-block;
-        background: #F5F5F7;
-        padding: 8px 16px;
-        border-radius: 10px;
-        margin: 4px;
-        font-size: 14px;
+        background: white;
+        padding: 6px 12px;
+        border-radius: 8px;
+        margin: 3px;
+        font-size: 13px;
+        border: 1px solid #F0EFEA;
     }
 
     .vote-result-name {
-        color: #86868B;
+        color: #9C9C9C;
     }
 
     .vote-result-value {
-        color: #1D1D1F;
+        color: #3D3D3D;
         font-weight: 600;
-        margin-left: 6px;
+        margin-left: 5px;
     }
 
     /* Dividers */
     hr {
         border: none;
         height: 1px;
-        background: #E5E5EA;
-        margin: 32px 0;
+        background: #EFEEE9;
+        margin: 28px 0;
     }
 
     /* Input styling */
     .stTextInput>div>div>input {
-        border-radius: 12px;
-        border: 1px solid #E5E5EA;
-        padding: 12px 16px;
-        font-size: 15px;
+        border-radius: 10px;
+        border: 1px solid #E5E4DF;
+        padding: 10px 14px;
+        font-size: 14px;
+        background: white;
         transition: all 0.2s ease;
     }
 
     .stTextInput>div>div>input:focus {
-        border-color: #007AFF;
-        box-shadow: 0 0 0 3px rgba(0, 122, 255, 0.1);
+        border-color: #C4B7D0;
+        box-shadow: 0 0 0 2px rgba(196, 183, 208, 0.15);
     }
 
     /* Section headers */
     .section-header {
-        font-size: 13px;
+        font-size: 11px;
         font-weight: 600;
-        color: #86868B;
+        color: #9C9C9C;
         text-transform: uppercase;
-        letter-spacing: 0.05em;
-        margin-bottom: 12px;
+        letter-spacing: 0.04em;
+        margin-bottom: 10px;
         text-align: center;
+    }
+
+    /* Tagline */
+    .tagline {
+        color: #ABABAB;
+        font-size: 14px;
+        text-align: center;
+        margin-bottom: 32px;
     }
 
     /* Center content */
@@ -230,15 +241,13 @@ st.markdown("""
     /* Hide Streamlit branding */
     #MainMenu {visibility: hidden;}
     footer {visibility: hidden;}
+    header {visibility: hidden;}
 
-    /* Subtle animations */
-    @keyframes fadeIn {
-        from { opacity: 0; transform: translateY(10px); }
-        to { opacity: 1; transform: translateY(0); }
-    }
-
-    .animate-in {
-        animation: fadeIn 0.3s ease-out;
+    /* Select box styling */
+    .stSelectbox>div>div {
+        background: white;
+        border-radius: 10px;
+        border: 1px solid #E5E4DF;
     }
     </style>
     """, unsafe_allow_html=True)
@@ -336,7 +345,7 @@ def calculate_stats(votes):
         return {
             'most_common': "?",
             'average': None,
-            'consensus': "No numerical votes"
+            'consensus': "—"
         }
 
     # Most common vote
@@ -373,25 +382,21 @@ def calculate_stats(votes):
     }
 
 # Main app logic
-st.markdown("<h1>✦ Pointing Poker</h1>", unsafe_allow_html=True)
+st.markdown("<h1>✦ Nubs x Claude</h1>", unsafe_allow_html=True)
 
 # If not in a session, show join/create options
 if st.session_state.current_session is None:
-    st.markdown("<p class='centered' style='color: #86868B; margin-bottom: 32px;'>Estimate together, align faster</p>", unsafe_allow_html=True)
+    st.markdown("<p class='tagline'>Estimate together, align faster</p>", unsafe_allow_html=True)
 
-    # Create session button
-    st.markdown("<div class='centered'>", unsafe_allow_html=True)
     if st.button("Create New Session", use_container_width=True):
         code = create_session()
         st.session_state.temp_session_code = code
         st.rerun()
-    st.markdown("</div>", unsafe_allow_html=True)
 
     st.markdown("<br>", unsafe_allow_html=True)
-
-    # Join existing session
     st.markdown("<p class='section-header'>Or join existing</p>", unsafe_allow_html=True)
-    join_code = st.text_input("Session code", max_chars=6, placeholder="Enter 6-digit code", label_visibility="collapsed").upper()
+
+    join_code = st.text_input("Session code", max_chars=6, placeholder="Enter code", label_visibility="collapsed").upper()
 
     # Show join form if we have a code
     if join_code or 'temp_session_code' in st.session_state:
@@ -399,7 +404,7 @@ if st.session_state.current_session is None:
 
         if 'temp_session_code' in st.session_state and not join_code:
             st.markdown(f"<div class='session-code'>{code_to_join}</div>", unsafe_allow_html=True)
-            st.markdown("<p class='centered' style='color: #86868B; font-size: 14px;'>Share this code with your team</p>", unsafe_allow_html=True)
+            st.markdown("<p class='centered' style='color: #ABABAB; font-size: 13px;'>Share this code with your team</p>", unsafe_allow_html=True)
 
         st.markdown("<br>", unsafe_allow_html=True)
 
@@ -418,6 +423,8 @@ if st.session_state.current_session is None:
                     st.error("Session not found")
             else:
                 st.warning("Please enter your name")
+
+        st.markdown("<div style='height: 8px'></div>", unsafe_allow_html=True)
 
         if st.button("Join as Observer", use_container_width=True):
             if username:
@@ -447,7 +454,7 @@ else:
 
         current_vote = session['votes'].get(st.session_state.user_name)
 
-        # Create a clean grid of vote buttons
+        # Create a clean grid of vote buttons - 4 per row
         cols = st.columns(4)
         for idx, option in enumerate(VOTE_OPTIONS):
             with cols[idx % 4]:
@@ -477,13 +484,13 @@ else:
     if voters:
         st.markdown(voter_badges, unsafe_allow_html=True)
     else:
-        st.markdown("<p class='centered' style='color: #86868B;'>No voters yet</p>", unsafe_allow_html=True)
+        st.markdown("<p class='centered' style='color: #ABABAB; font-size: 13px;'>No voters yet</p>", unsafe_allow_html=True)
 
     # Display observers
     if observers:
         observer_badges = "<div class='participant-list'>"
         for username in observers:
-            observer_badges += f"<span class='user-badge observer'>{username} 👁</span>"
+            observer_badges += f"<span class='user-badge observer'>{username}</span>"
         observer_badges += "</div>"
         st.markdown(observer_badges, unsafe_allow_html=True)
 
@@ -507,7 +514,7 @@ else:
         # Calculate and display statistics
         stats = calculate_stats(session['votes'])
         if stats:
-            st.markdown("<br>", unsafe_allow_html=True)
+            st.markdown("<div style='height: 12px'></div>", unsafe_allow_html=True)
 
             col1, col2, col3 = st.columns(3)
 
@@ -546,7 +553,7 @@ else:
             clear_votes(st.session_state.current_session)
             st.rerun()
 
-        st.markdown("<br>", unsafe_allow_html=True)
+        st.markdown("<div style='height: 8px'></div>", unsafe_allow_html=True)
 
         users_to_kick = [u for u in session['users'].keys() if u != st.session_state.user_name]
         if users_to_kick:
@@ -556,7 +563,7 @@ else:
                 st.rerun()
 
     # Leave session
-    st.markdown("<br>", unsafe_allow_html=True)
+    st.markdown("<div style='height: 8px'></div>", unsafe_allow_html=True)
     if st.button("Leave Session", use_container_width=True):
         st.session_state.current_session = None
         st.session_state.user_name = None
