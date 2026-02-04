@@ -27,8 +27,8 @@ st.markdown("""
     }
 
     .main .block-container {
-        padding-top: 1.5rem;
-        padding-bottom: 1.5rem;
+        padding-top: 0.75rem;
+        padding-bottom: 1rem;
         max-width: 420px;
     }
 
@@ -361,7 +361,7 @@ if 'last_username' not in st.session_state:
 VOTE_OPTIONS = ["0.5", "1", "2", "3", "5", "8", "13", "?"]
 
 def generate_session_code():
-    return ''.join(random.choices(string.ascii_uppercase + string.digits, k=6))
+    return ''.join(random.choices(string.ascii_uppercase, k=4))
 
 def create_session():
     code = generate_session_code()
@@ -459,7 +459,7 @@ if st.session_state.current_session is None:
 
     st.markdown("<p class='section-header'>Or join existing</p>", unsafe_allow_html=True)
 
-    join_code = st.text_input("Session Code", max_chars=6, placeholder="ABC123").upper()
+    join_code = st.text_input("Session Code", max_chars=4, placeholder="ABCD").upper()
 
     if join_code or 'temp_session_code' in st.session_state:
         code_to_join = join_code if join_code else st.session_state.get('temp_session_code', '')
