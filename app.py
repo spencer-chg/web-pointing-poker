@@ -31,6 +31,12 @@ st.markdown("""
         font-family: 'Inter', -apple-system, BlinkMacSystemFont, sans-serif;
     }
 
+    /* Custom text selection color */
+    ::selection {
+        background-color: #C8DBC8;
+        color: #2D2D2D;
+    }
+
     /* App background */
     .stApp {
         background-color: #F8F7F4;
