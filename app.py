@@ -27,9 +27,15 @@ st.markdown("""
     }
 
     .main .block-container {
-        padding-top: 0.75rem;
+        padding-top: 0 !important;
         padding-bottom: 1rem;
         max-width: 420px;
+    }
+
+    /* Kill all top spacing */
+    .block-container > div:first-child {
+        margin-top: 0 !important;
+        padding-top: 0 !important;
     }
 
     /* Tighten all element spacing */
@@ -53,7 +59,8 @@ st.markdown("""
         color: #3D3D3D !important;
         text-align: center;
         letter-spacing: -0.02em;
-        margin-bottom: 0.5rem !important;
+        margin-top: 0.5rem !important;
+        margin-bottom: 0.25rem !important;
     }
 
     /* Buttons - centered container */
