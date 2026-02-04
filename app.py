@@ -27,9 +27,18 @@ st.markdown("""
     }
 
     .main .block-container {
-        padding-top: 2.5rem;
-        padding-bottom: 2.5rem;
+        padding-top: 1.5rem;
+        padding-bottom: 1.5rem;
         max-width: 420px;
+    }
+
+    /* Tighten all element spacing */
+    .element-container {
+        margin-bottom: 0.4rem !important;
+    }
+
+    .stMarkdown {
+        margin-bottom: 0 !important;
     }
 
     /* All text should be dark by default */
@@ -59,13 +68,13 @@ st.markdown("""
         color: white !important;
         border: none !important;
         border-radius: 10px !important;
-        padding: 12px 20px !important;
+        padding: 10px 18px !important;
         font-weight: 500 !important;
         font-size: 14px !important;
         font-family: 'Inter', -apple-system, sans-serif !important;
         transition: all 0.15s ease !important;
         box-shadow: none !important;
-        height: 44px !important;
+        height: 40px !important;
         max-width: 280px !important;
         width: 100% !important;
     }
@@ -93,9 +102,10 @@ st.markdown("""
     [data-testid="column"] .stButton > button {
         max-width: none !important;
         width: 100% !important;
-        padding: 10px 8px !important;
-        font-size: 15px !important;
+        padding: 8px 6px !important;
+        font-size: 14px !important;
         font-weight: 600 !important;
+        height: 38px !important;
     }
 
     /* Text inputs - comprehensive fix */
@@ -120,10 +130,10 @@ st.markdown("""
         color: #3D3D3D !important;
         border: 1.5px solid #D8D6D1 !important;
         border-radius: 10px !important;
-        padding: 12px 14px !important;
-        font-size: 15px !important;
+        padding: 10px 12px !important;
+        font-size: 14px !important;
         font-family: 'Inter', -apple-system, sans-serif !important;
-        height: 44px !important;
+        height: 40px !important;
         box-sizing: border-box !important;
         width: 100% !important;
     }
@@ -181,33 +191,33 @@ st.markdown("""
     .session-code {
         background: linear-gradient(135deg, #C8BFD6 0%, #B5C9D3 100%);
         color: white;
-        padding: 16px 24px;
-        border-radius: 14px;
-        font-size: 20px;
+        padding: 12px 20px;
+        border-radius: 12px;
+        font-size: 18px;
         font-weight: 600;
         text-align: center;
-        letter-spacing: 4px;
-        margin: 16px auto;
-        max-width: 220px;
+        letter-spacing: 3px;
+        margin: 10px auto;
+        max-width: 200px;
     }
 
     /* Participant badges */
     .participant-list {
         display: flex;
         flex-wrap: wrap;
-        gap: 8px;
+        gap: 6px;
         justify-content: center;
-        margin: 12px 0;
+        margin: 8px 0;
     }
 
     .user-badge {
         display: inline-flex;
         align-items: center;
-        gap: 6px;
-        padding: 8px 14px;
-        border-radius: 20px;
+        gap: 4px;
+        padding: 5px 10px;
+        border-radius: 16px;
         font-weight: 500;
-        font-size: 14px;
+        font-size: 13px;
     }
 
     .user-badge.voted {
@@ -228,24 +238,24 @@ st.markdown("""
     /* Stats cards */
     .stats-card {
         background: white;
-        border-radius: 14px;
-        padding: 18px 12px;
+        border-radius: 10px;
+        padding: 12px 8px;
         text-align: center;
         border: 1px solid #ECEAE5;
     }
 
     .stat-value {
-        font-size: 26px;
+        font-size: 22px;
         font-weight: 600;
         color: #3D3D3D;
-        margin-bottom: 4px;
+        margin-bottom: 2px;
     }
 
     .stat-label {
-        font-size: 11px;
+        font-size: 10px;
         color: #8C8C8C;
         text-transform: uppercase;
-        letter-spacing: 0.05em;
+        letter-spacing: 0.04em;
     }
 
     /* Consensus colors */
@@ -257,10 +267,10 @@ st.markdown("""
     .vote-result {
         display: inline-block;
         background: white;
-        padding: 8px 14px;
-        border-radius: 10px;
-        margin: 4px;
-        font-size: 14px;
+        padding: 5px 10px;
+        border-radius: 8px;
+        margin: 2px;
+        font-size: 13px;
         border: 1px solid #ECEAE5;
     }
 
@@ -271,7 +281,7 @@ st.markdown("""
     .vote-result-value {
         color: #3D3D3D;
         font-weight: 600;
-        margin-left: 6px;
+        margin-left: 4px;
     }
 
     /* Dividers */
@@ -279,26 +289,26 @@ st.markdown("""
         border: none;
         height: 1px;
         background: #E8E6E1;
-        margin: 24px 0;
+        margin: 14px 0;
     }
 
     /* Section headers */
     .section-header {
-        font-size: 12px;
+        font-size: 11px;
         font-weight: 600;
         color: #8C8C8C !important;
         text-transform: uppercase;
-        letter-spacing: 0.06em;
-        margin-bottom: 12px;
+        letter-spacing: 0.05em;
+        margin-bottom: 8px;
         text-align: center;
     }
 
     /* Tagline */
     .tagline {
         color: #9C9C9C !important;
-        font-size: 15px;
+        font-size: 14px;
         text-align: center;
-        margin-bottom: 28px;
+        margin-bottom: 16px;
     }
 
     /* Centered text */
@@ -309,7 +319,7 @@ st.markdown("""
     /* Helper text */
     .helper-text {
         color: #9C9C9C !important;
-        font-size: 13px;
+        font-size: 12px;
         text-align: center;
     }
 
@@ -447,7 +457,6 @@ if st.session_state.current_session is None:
         st.session_state.temp_session_code = code
         st.rerun()
 
-    st.markdown("<br>", unsafe_allow_html=True)
     st.markdown("<p class='section-header'>Or join existing</p>", unsafe_allow_html=True)
 
     join_code = st.text_input("Session Code", max_chars=6, placeholder="ABC123").upper()
@@ -460,8 +469,6 @@ if st.session_state.current_session is None:
             st.markdown("<p class='helper-text'>Share this code with your team</p>", unsafe_allow_html=True)
 
         username = st.text_input("Your Name", value=st.session_state.last_username, placeholder="Enter your name", key="join_username")
-
-        st.markdown("<br>", unsafe_allow_html=True)
 
         if st.button("Join as Voter", use_container_width=True, type="primary"):
             if username:
@@ -553,7 +560,6 @@ else:
 
         stats = calculate_stats(session['votes'])
         if stats:
-            st.markdown("<br>", unsafe_allow_html=True)
             c1, c2, c3 = st.columns(3)
             with c1:
                 st.markdown(f"<div class='stats-card'><div class='stat-value'>{stats['most_common']}</div><div class='stat-label'>Most Common</div></div>", unsafe_allow_html=True)
