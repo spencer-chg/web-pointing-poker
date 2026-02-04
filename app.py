@@ -1,8 +1,8 @@
 import streamlit as st
 import random
 import string
-from datetime import datetime
 import statistics
+from supabase import create_client
 
 # Page config
 st.set_page_config(
@@ -10,6 +10,15 @@ st.set_page_config(
     page_icon="✦",
     layout="centered"
 )
+
+# Initialize Supabase client
+@st.cache_resource
+def get_supabase():
+    url = st.secrets["SUPABASE_URL"]
+    key = st.secrets["SUPABASE_KEY"]
+    return create_client(url, key)
+
+supabase = get_supabase()
 
 # Complete design system with proper Streamlit overrides
 st.markdown("""
@@ -129,20 +138,6 @@ st.markdown("""
 
     [data-testid="column"] .stButton > button[kind="secondary"] {
         -webkit-text-fill-color: #444444 !important;
-    }
-
-    /* Leave session - subtle text style */
-    .leave-btn button {
-        background: transparent !important;
-        color: #999 !important;
-        font-size: 13px !important;
-        height: auto !important;
-        padding: 8px !important;
-    }
-
-    .leave-btn button:hover {
-        background: transparent !important;
-        color: #666 !important;
     }
 
     /* Text inputs - comprehensive fix */
@@ -403,9 +398,6 @@ st.markdown("""
     """, unsafe_allow_html=True)
 
 # Initialize session state
-if 'sessions' not in st.session_state:
-    st.session_state.sessions = {}
-
 if 'current_session' not in st.session_state:
     st.session_state.current_session = None
 
@@ -421,57 +413,99 @@ if 'last_username' not in st.session_state:
 # Voting options
 VOTE_OPTIONS = ["0.5", "1", "2", "3", "5", "8", "13", "?"]
 
+# ========== SUPABASE FUNCTIONS ==========
+
 def generate_session_code():
     return ''.join(random.choices(string.ascii_uppercase, k=4))
 
 def create_session():
+    """Create a new session in Supabase"""
     code = generate_session_code()
-    st.session_state.sessions[code] = {
-        'users': {},
-        'votes': {},
-        'created_at': datetime.now(),
-        'votes_revealed': False
-    }
+    # Make sure code is unique
+    existing = supabase.table('sessions').select('code').eq('code', code).execute()
+    while existing.data:
+        code = generate_session_code()
+        existing = supabase.table('sessions').select('code').eq('code', code).execute()
+
+    supabase.table('sessions').insert({'code': code, 'votes_revealed': False}).execute()
     return code
 
+def session_exists(code):
+    """Check if a session exists"""
+    result = supabase.table('sessions').select('code').eq('code', code).execute()
+    return len(result.data) > 0
+
 def join_session(code, username, is_observer):
-    if code in st.session_state.sessions:
-        st.session_state.sessions[code]['users'][username] = {
-            'is_observer': is_observer,
-            'joined_at': datetime.now()
-        }
-        st.session_state.current_session = code
-        st.session_state.user_name = username
-        st.session_state.is_observer = is_observer
-        st.session_state.last_username = username
-        return True
-    return False
+    """Add user to a session"""
+    if not session_exists(code):
+        return False
+
+    # Upsert user (in case they're rejoining)
+    supabase.table('session_users').upsert({
+        'session_code': code,
+        'username': username,
+        'is_observer': is_observer
+    }, on_conflict='session_code,username').execute()
+
+    st.session_state.current_session = code
+    st.session_state.user_name = username
+    st.session_state.is_observer = is_observer
+    st.session_state.last_username = username
+    return True
+
+def get_session_data(code):
+    """Fetch all data for a session"""
+    # Get users
+    users_result = supabase.table('session_users').select('*').eq('session_code', code).execute()
+    users = {u['username']: {'is_observer': u['is_observer']} for u in users_result.data}
+
+    # Get votes
+    votes_result = supabase.table('votes').select('*').eq('session_code', code).execute()
+    votes = {v['username']: v['vote'] for v in votes_result.data}
+
+    # Get session info
+    session_result = supabase.table('sessions').select('*').eq('code', code).execute()
+    votes_revealed = session_result.data[0]['votes_revealed'] if session_result.data else False
+
+    return {
+        'users': users,
+        'votes': votes,
+        'votes_revealed': votes_revealed
+    }
 
 def cast_vote(session_code, username, vote):
-    if session_code in st.session_state.sessions:
-        st.session_state.sessions[session_code]['votes'][username] = vote
+    """Record a vote"""
+    supabase.table('votes').upsert({
+        'session_code': session_code,
+        'username': username,
+        'vote': vote
+    }, on_conflict='session_code,username').execute()
 
 def clear_votes(session_code):
-    if session_code in st.session_state.sessions:
-        st.session_state.sessions[session_code]['votes'] = {}
-        st.session_state.sessions[session_code]['votes_revealed'] = False
+    """Clear all votes for a session"""
+    supabase.table('votes').delete().eq('session_code', session_code).execute()
+    supabase.table('sessions').update({'votes_revealed': False}).eq('code', session_code).execute()
+
+def reveal_votes(session_code):
+    """Set votes as revealed"""
+    supabase.table('sessions').update({'votes_revealed': True}).eq('code', session_code).execute()
 
 def kick_user(session_code, username):
-    if session_code in st.session_state.sessions:
-        session = st.session_state.sessions[session_code]
-        if username in session['users']:
-            del session['users'][username]
-        if username in session['votes']:
-            del session['votes'][username]
+    """Remove a user from the session"""
+    supabase.table('session_users').delete().eq('session_code', session_code).eq('username', username).execute()
+    supabase.table('votes').delete().eq('session_code', session_code).eq('username', username).execute()
 
-def all_voters_voted(session_code):
-    if session_code not in st.session_state.sessions:
-        return False
-    session = st.session_state.sessions[session_code]
-    voters = [u for u, data in session['users'].items() if not data['is_observer']]
+def leave_session(session_code, username):
+    """Current user leaves the session"""
+    supabase.table('session_users').delete().eq('session_code', session_code).eq('username', username).execute()
+    supabase.table('votes').delete().eq('session_code', session_code).eq('username', username).execute()
+
+def all_voters_voted(session_data):
+    """Check if all voters have voted"""
+    voters = [u for u, data in session_data['users'].items() if not data['is_observer']]
     if not voters:
         return False
-    return all(voter in session['votes'] for voter in voters)
+    return all(voter in session_data['votes'] for voter in voters)
 
 def calculate_stats(votes):
     if not votes:
@@ -508,6 +542,16 @@ def calculate_stats(votes):
 # ========== MAIN APP ==========
 
 st.markdown("<h1>✦ Nubs x Claude</h1>", unsafe_allow_html=True)
+
+# Auto-refresh for real-time updates (every 2 seconds when in session)
+if st.session_state.current_session:
+    st.markdown("""
+        <script>
+            setTimeout(function() {
+                window.location.reload();
+            }, 2000);
+        </script>
+    """, unsafe_allow_html=True)
 
 if st.session_state.current_session is None:
     # HOME SCREEN
@@ -576,13 +620,18 @@ if st.session_state.current_session is None:
                     st.warning("Please enter your name")
 
 else:
-    # SESSION SCREEN
-    session = st.session_state.sessions[st.session_state.current_session]
+    # SESSION SCREEN - fetch fresh data from Supabase
+    session = get_session_data(st.session_state.current_session)
 
     st.markdown(f"<div class='session-code'>{st.session_state.current_session}</div>", unsafe_allow_html=True)
 
-    all_voted = all_voters_voted(st.session_state.current_session)
+    all_voted = all_voters_voted(session)
     votes_revealed = session['votes_revealed'] or all_voted
+
+    # Auto-reveal when all voted
+    if all_voted and not session['votes_revealed']:
+        reveal_votes(st.session_state.current_session)
+        votes_revealed = True
 
     # Voting buttons (voters only)
     if not st.session_state.is_observer:
@@ -625,11 +674,6 @@ else:
         obs_badges += "</div>"
         st.markdown(obs_badges, unsafe_allow_html=True)
 
-    # Auto-reveal
-    if all_voted and not session['votes_revealed']:
-        session['votes_revealed'] = True
-        st.balloons()
-
     # Results
     if votes_revealed and session['votes']:
         st.markdown("---")
@@ -670,6 +714,7 @@ else:
 
     # Leave button
     if st.button("Leave Session", use_container_width=True, type="secondary"):
+        leave_session(st.session_state.current_session, st.session_state.user_name)
         st.session_state.current_session = None
         st.session_state.user_name = None
         st.session_state.is_observer = None
