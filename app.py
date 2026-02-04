@@ -3,6 +3,7 @@ import random
 import string
 import statistics
 from supabase import create_client
+from streamlit_autorefresh import st_autorefresh
 
 # Page config
 st.set_page_config(
@@ -435,10 +436,30 @@ def session_exists(code):
     result = supabase.table('sessions').select('code').eq('code', code).execute()
     return len(result.data) > 0
 
-def join_session(code, username, is_observer):
+def username_taken(code, username):
+    """Check if username is already in use in this session"""
+    result = supabase.table('session_users').select('username').eq('session_code', code).eq('username', username).execute()
+    return len(result.data) > 0
+
+def cleanup_old_sessions():
+    """Delete sessions inactive for more than 24 hours"""
+    from datetime import datetime, timedelta, timezone
+    cutoff = (datetime.now(timezone.utc) - timedelta(hours=24)).isoformat()
+    # Delete old sessions (cascade will handle users and votes)
+    supabase.table('sessions').delete().lt('created_at', cutoff).execute()
+
+def join_session(code, username, is_observer, force_rejoin=False):
     """Add user to a session"""
     if not session_exists(code):
-        return False
+        return "not_found"
+
+    # Check if username is taken (unless rejoining)
+    if not force_rejoin and username_taken(code, username):
+        # Check if it's the same user rejoining via URL params
+        if st.session_state.user_name == username:
+            force_rejoin = True
+        else:
+            return "username_taken"
 
     # Upsert user (in case they're rejoining)
     supabase.table('session_users').upsert({
@@ -457,7 +478,7 @@ def join_session(code, username, is_observer):
     st.query_params['user'] = username
     if is_observer:
         st.query_params['observer'] = 'true'
-    return True
+    return "success"
 
 def get_session_data(code):
     """Fetch all data for a session"""
@@ -552,21 +573,19 @@ if st.session_state.current_session is None and 'session' in query_params and 'u
     username = query_params['user']
     is_obs = query_params.get('observer', 'false') == 'true'
     if session_exists(code):
-        join_session(code, username, is_obs)
+        join_session(code, username, is_obs, force_rejoin=True)
 
 # ========== MAIN APP ==========
 
+# Cleanup old sessions on load (runs occasionally)
+if random.random() < 0.1:  # 10% chance to avoid running every time
+    cleanup_old_sessions()
+
 st.markdown("<h1>✦ Nubs x Claude</h1>", unsafe_allow_html=True)
 
-# Auto-refresh for real-time updates (every 2 seconds when in session)
+# Auto-refresh for real-time updates (every 3 seconds when in session)
 if st.session_state.current_session:
-    st.markdown("""
-        <script>
-            setTimeout(function() {
-                window.location.reload();
-            }, 2000);
-        </script>
-    """, unsafe_allow_html=True)
+    st_autorefresh(interval=3000, limit=None, key="session_refresh")
 
 if st.session_state.current_session is None:
     # HOME SCREEN
@@ -583,17 +602,23 @@ if st.session_state.current_session is None:
 
         if st.button("Join as Voter", use_container_width=True, type="primary"):
             if username:
-                if join_session(code_to_join, username, False):
+                result = join_session(code_to_join, username, False)
+                if result == "success":
                     del st.session_state.temp_session_code
                     st.rerun()
+                elif result == "username_taken":
+                    st.error("That name is already taken in this session")
             else:
                 st.warning("Please enter your name")
 
         if st.button("Join as Observer", use_container_width=True, type="secondary"):
             if username:
-                if join_session(code_to_join, username, True):
+                result = join_session(code_to_join, username, True)
+                if result == "success":
                     del st.session_state.temp_session_code
                     st.rerun()
+                elif result == "username_taken":
+                    st.error("That name is already taken in this session")
             else:
                 st.warning("Please enter your name")
 
@@ -618,8 +643,11 @@ if st.session_state.current_session is None:
 
             if st.button("Join as Voter", use_container_width=True, type="primary"):
                 if username:
-                    if join_session(join_code, username, False):
+                    result = join_session(join_code, username, False)
+                    if result == "success":
                         st.rerun()
+                    elif result == "username_taken":
+                        st.error("That name is already taken in this session")
                     else:
                         st.error("Session not found")
                 else:
@@ -627,8 +655,11 @@ if st.session_state.current_session is None:
 
             if st.button("Join as Observer", use_container_width=True, type="secondary"):
                 if username:
-                    if join_session(join_code, username, True):
+                    result = join_session(join_code, username, True)
+                    if result == "success":
                         st.rerun()
+                    elif result == "username_taken":
+                        st.error("That name is already taken in this session")
                     else:
                         st.error("Session not found")
                 else:
