@@ -47,19 +47,27 @@ st.markdown("""
         margin-bottom: 0.5rem !important;
     }
 
+    /* Buttons - centered container */
+    .stButton {
+        display: flex !important;
+        justify-content: center !important;
+    }
+
     /* All buttons - base style */
     .stButton > button {
         background-color: #8BA888 !important;
         color: white !important;
         border: none !important;
-        border-radius: 12px !important;
-        padding: 14px 24px !important;
+        border-radius: 10px !important;
+        padding: 12px 20px !important;
         font-weight: 500 !important;
-        font-size: 15px !important;
+        font-size: 14px !important;
         font-family: 'Inter', -apple-system, sans-serif !important;
         transition: all 0.15s ease !important;
         box-shadow: none !important;
-        min-height: 48px !important;
+        height: 44px !important;
+        max-width: 280px !important;
+        width: 100% !important;
     }
 
     .stButton > button:hover {
@@ -81,48 +89,80 @@ st.markdown("""
         background-color: #E0DED9 !important;
     }
 
-    /* Text inputs - comprehensive fix */
-    .stTextInput > div > div > input {
-        background-color: white !important;
-        color: #3D3D3D !important;
-        border: 2px solid #E0DED9 !important;
-        border-radius: 12px !important;
-        padding: 14px 16px !important;
+    /* Vote buttons in columns - fill their column */
+    [data-testid="column"] .stButton > button {
+        max-width: none !important;
+        width: 100% !important;
+        padding: 10px 8px !important;
         font-size: 15px !important;
-        font-family: 'Inter', -apple-system, sans-serif !important;
-        min-height: 48px !important;
-        box-sizing: border-box !important;
+        font-weight: 600 !important;
     }
 
-    .stTextInput > div > div > input::placeholder {
-        color: #A0A0A0 !important;
+    /* Text inputs - comprehensive fix */
+    .stTextInput {
+        max-width: 280px !important;
+        margin: 0 auto !important;
+    }
+
+    /* Remove ALL borders from wrapper elements */
+    .stTextInput > div,
+    .stTextInput > div > div,
+    .stTextInput [data-baseweb="input"],
+    .stTextInput [data-baseweb="base-input"] {
+        background: transparent !important;
+        border: none !important;
+        box-shadow: none !important;
+    }
+
+    /* Style only the actual input */
+    .stTextInput input {
+        background-color: #FFFFFF !important;
+        color: #3D3D3D !important;
+        border: 1.5px solid #D8D6D1 !important;
+        border-radius: 10px !important;
+        padding: 12px 14px !important;
+        font-size: 15px !important;
+        font-family: 'Inter', -apple-system, sans-serif !important;
+        height: 44px !important;
+        box-sizing: border-box !important;
+        width: 100% !important;
+    }
+
+    .stTextInput input::placeholder {
+        color: #A8A8A8 !important;
         opacity: 1 !important;
     }
 
-    .stTextInput > div > div > input:focus {
-        border-color: #B8C4B6 !important;
-        box-shadow: 0 0 0 1px #B8C4B6 !important;
+    .stTextInput input:focus {
+        border-color: #A8B8A6 !important;
         outline: none !important;
+        box-shadow: none !important;
     }
 
-    /* Remove red error styling on inputs */
-    .stTextInput > div[data-baseweb="input"] > div {
-        border-color: #E0DED9 !important;
-    }
-
-    /* Input labels */
+    /* Input labels - centered */
     .stTextInput > label {
-        color: #6B6B6B !important;
-        font-size: 13px !important;
+        color: #7A7A7A !important;
+        font-size: 12px !important;
         font-weight: 500 !important;
+        text-align: center !important;
+        display: block !important;
         margin-bottom: 6px !important;
     }
 
+    .stTextInput > label p {
+        text-align: center !important;
+    }
+
     /* Select boxes */
+    .stSelectbox {
+        max-width: 280px !important;
+        margin: 0 auto !important;
+    }
+
     .stSelectbox > div > div {
         background-color: white !important;
-        border: 2px solid #E0DED9 !important;
-        border-radius: 12px !important;
+        border: 1.5px solid #D8D6D1 !important;
+        border-radius: 10px !important;
     }
 
     .stSelectbox > div > div > div {
@@ -130,9 +170,11 @@ st.markdown("""
     }
 
     .stSelectbox > label {
-        color: #6B6B6B !important;
-        font-size: 13px !important;
+        color: #7A7A7A !important;
+        font-size: 12px !important;
         font-weight: 500 !important;
+        text-align: center !important;
+        display: block !important;
     }
 
     /* Session code display */
