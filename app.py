@@ -213,8 +213,8 @@ st.markdown("""
 
     /* Session code display */
     .session-code {
-        background: #6B7C6E;
-        color: white;
+        background: #E8EDE8;
+        color: #3D4A3D;
         padding: 10px 18px;
         border-radius: 10px;
         font-size: 17px;
