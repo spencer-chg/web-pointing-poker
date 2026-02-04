@@ -27,26 +27,13 @@ st.markdown("""
     }
 
     .main .block-container {
-        padding: 0 !important;
+        padding: 1rem 1rem 1.5rem 1rem !important;
         max-width: 420px;
     }
 
-    /* Kill ALL spacing aggressively */
-    .block-container, .block-container > div, .stVerticalBlock {
-        gap: 0.3rem !important;
-    }
-
-    .element-container {
-        margin: 0 !important;
-        padding: 0 !important;
-    }
-
-    .stMarkdown {
-        margin: 0 !important;
-    }
-
+    /* Moderate spacing */
     [data-testid="stVerticalBlock"] {
-        gap: 0.3rem !important;
+        gap: 0.6rem !important;
     }
 
     /* All text should be dark by default */
@@ -57,12 +44,11 @@ st.markdown("""
     /* Title */
     h1 {
         font-weight: 600 !important;
-        font-size: 1.4rem !important;
+        font-size: 1.5rem !important;
         color: #3D3D3D !important;
         text-align: center;
         letter-spacing: -0.02em;
-        margin: 0.3rem 0 0.15rem 0 !important;
-        padding: 0 !important;
+        margin: 0 0 0.25rem 0 !important;
     }
 
     /* Buttons - centered container */
@@ -76,15 +62,15 @@ st.markdown("""
         background-color: #8BA888 !important;
         color: white !important;
         border: none !important;
-        border-radius: 8px !important;
-        padding: 8px 16px !important;
+        border-radius: 10px !important;
+        padding: 10px 18px !important;
         font-weight: 500 !important;
-        font-size: 13px !important;
+        font-size: 14px !important;
         font-family: 'Inter', -apple-system, sans-serif !important;
         transition: all 0.15s ease !important;
         box-shadow: none !important;
-        height: 36px !important;
-        max-width: 260px !important;
+        height: 42px !important;
+        max-width: 280px !important;
         width: 100% !important;
     }
 
@@ -111,10 +97,10 @@ st.markdown("""
     [data-testid="column"] .stButton > button {
         max-width: none !important;
         width: 100% !important;
-        padding: 6px 4px !important;
-        font-size: 13px !important;
+        padding: 8px 6px !important;
+        font-size: 14px !important;
         font-weight: 600 !important;
-        height: 34px !important;
+        height: 38px !important;
     }
 
     /* Text inputs - comprehensive fix */
@@ -138,11 +124,11 @@ st.markdown("""
         background-color: #FFFFFF !important;
         color: #3D3D3D !important;
         border: 1.5px solid #D8D6D1 !important;
-        border-radius: 8px !important;
-        padding: 8px 10px !important;
-        font-size: 13px !important;
+        border-radius: 10px !important;
+        padding: 10px 12px !important;
+        font-size: 14px !important;
         font-family: 'Inter', -apple-system, sans-serif !important;
-        height: 36px !important;
+        height: 42px !important;
         box-sizing: border-box !important;
         width: 100% !important;
     }
@@ -161,11 +147,11 @@ st.markdown("""
     /* Input labels - centered */
     .stTextInput > label {
         color: #7A7A7A !important;
-        font-size: 11px !important;
+        font-size: 12px !important;
         font-weight: 500 !important;
         text-align: center !important;
         display: block !important;
-        margin-bottom: 2px !important;
+        margin-bottom: 4px !important;
     }
 
     .stTextInput > label p {
@@ -200,33 +186,33 @@ st.markdown("""
     .session-code {
         background: linear-gradient(135deg, #C8BFD6 0%, #B5C9D3 100%);
         color: white;
-        padding: 8px 16px;
+        padding: 10px 18px;
         border-radius: 10px;
-        font-size: 16px;
+        font-size: 17px;
         font-weight: 600;
         text-align: center;
         letter-spacing: 3px;
-        margin: 4px auto;
-        max-width: 160px;
+        margin: 6px auto;
+        max-width: 150px;
     }
 
     /* Participant badges */
     .participant-list {
         display: flex;
         flex-wrap: wrap;
-        gap: 4px;
+        gap: 6px;
         justify-content: center;
-        margin: 2px 0;
+        margin: 4px 0;
     }
 
     .user-badge {
         display: inline-flex;
         align-items: center;
-        gap: 3px;
-        padding: 4px 8px;
-        border-radius: 12px;
+        gap: 4px;
+        padding: 5px 10px;
+        border-radius: 14px;
         font-weight: 500;
-        font-size: 12px;
+        font-size: 13px;
     }
 
     .user-badge.voted {
@@ -247,21 +233,21 @@ st.markdown("""
     /* Stats cards */
     .stats-card {
         background: white;
-        border-radius: 8px;
-        padding: 8px 6px;
+        border-radius: 10px;
+        padding: 12px 8px;
         text-align: center;
         border: 1px solid #ECEAE5;
     }
 
     .stat-value {
-        font-size: 18px;
+        font-size: 20px;
         font-weight: 600;
         color: #3D3D3D;
-        margin-bottom: 1px;
+        margin-bottom: 2px;
     }
 
     .stat-label {
-        font-size: 9px;
+        font-size: 10px;
         color: #8C8C8C;
         text-transform: uppercase;
         letter-spacing: 0.04em;
@@ -276,10 +262,10 @@ st.markdown("""
     .vote-result {
         display: inline-block;
         background: white;
-        padding: 3px 8px;
-        border-radius: 6px;
-        margin: 1px;
-        font-size: 12px;
+        padding: 5px 10px;
+        border-radius: 8px;
+        margin: 2px;
+        font-size: 13px;
         border: 1px solid #ECEAE5;
     }
 
@@ -290,7 +276,7 @@ st.markdown("""
     .vote-result-value {
         color: #3D3D3D;
         font-weight: 600;
-        margin-left: 4px;
+        margin-left: 5px;
     }
 
     /* Dividers */
@@ -298,26 +284,26 @@ st.markdown("""
         border: none;
         height: 1px;
         background: #E8E6E1;
-        margin: 6px 0;
+        margin: 10px 0;
     }
 
     /* Section headers */
     .section-header {
-        font-size: 10px;
+        font-size: 11px;
         font-weight: 600;
         color: #8C8C8C !important;
         text-transform: uppercase;
         letter-spacing: 0.05em;
-        margin: 2px 0 4px 0;
+        margin: 4px 0 6px 0;
         text-align: center;
     }
 
     /* Tagline */
     .tagline {
         color: #9C9C9C !important;
-        font-size: 12px;
+        font-size: 13px;
         text-align: center;
-        margin: 0 0 6px 0;
+        margin: 0 0 10px 0;
     }
 
     /* Centered text */
@@ -328,9 +314,9 @@ st.markdown("""
     /* Helper text */
     .helper-text {
         color: #9C9C9C !important;
-        font-size: 11px;
+        font-size: 12px;
         text-align: center;
-        margin: 0;
+        margin: 2px 0;
     }
 
     /* Hide Streamlit elements */
