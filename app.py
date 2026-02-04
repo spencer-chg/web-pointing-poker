@@ -433,20 +433,29 @@ def create_session():
 
 def session_exists(code):
     """Check if a session exists"""
-    result = supabase.table('sessions').select('code').eq('code', code).execute()
-    return len(result.data) > 0
+    try:
+        result = supabase.table('sessions').select('code').eq('code', code).execute()
+        return len(result.data) > 0
+    except Exception:
+        return False
 
 def username_taken(code, username):
     """Check if username is already in use in this session"""
-    result = supabase.table('session_users').select('username').eq('session_code', code).eq('username', username).execute()
-    return len(result.data) > 0
+    try:
+        result = supabase.table('session_users').select('username').eq('session_code', code).eq('username', username).execute()
+        return len(result.data) > 0
+    except Exception:
+        return False
 
 def cleanup_old_sessions():
     """Delete sessions inactive for more than 24 hours"""
-    from datetime import datetime, timedelta, timezone
-    cutoff = (datetime.now(timezone.utc) - timedelta(hours=24)).isoformat()
-    # Delete old sessions (cascade will handle users and votes)
-    supabase.table('sessions').delete().lt('created_at', cutoff).execute()
+    try:
+        from datetime import datetime, timedelta, timezone
+        cutoff = (datetime.now(timezone.utc) - timedelta(hours=24)).isoformat()
+        # Delete old sessions (cascade will handle users and votes)
+        supabase.table('sessions').delete().lt('created_at', cutoff).execute()
+    except Exception:
+        pass  # Silently fail cleanup
 
 def join_session(code, username, is_observer, force_rejoin=False):
     """Add user to a session"""
@@ -482,50 +491,73 @@ def join_session(code, username, is_observer, force_rejoin=False):
 
 def get_session_data(code):
     """Fetch all data for a session"""
-    # Get users
-    users_result = supabase.table('session_users').select('*').eq('session_code', code).execute()
-    users = {u['username']: {'is_observer': u['is_observer']} for u in users_result.data}
+    try:
+        # Get users
+        users_result = supabase.table('session_users').select('*').eq('session_code', code).execute()
+        users = {u['username']: {'is_observer': u['is_observer']} for u in users_result.data}
 
-    # Get votes
-    votes_result = supabase.table('votes').select('*').eq('session_code', code).execute()
-    votes = {v['username']: v['vote'] for v in votes_result.data}
+        # Get votes
+        votes_result = supabase.table('votes').select('*').eq('session_code', code).execute()
+        votes = {v['username']: v['vote'] for v in votes_result.data}
 
-    # Get session info
-    session_result = supabase.table('sessions').select('*').eq('code', code).execute()
-    votes_revealed = session_result.data[0]['votes_revealed'] if session_result.data else False
+        # Get session info
+        session_result = supabase.table('sessions').select('*').eq('code', code).execute()
+        votes_revealed = session_result.data[0]['votes_revealed'] if session_result.data else False
 
-    return {
-        'users': users,
-        'votes': votes,
-        'votes_revealed': votes_revealed
-    }
+        return {
+            'users': users,
+            'votes': votes,
+            'votes_revealed': votes_revealed
+        }
+    except Exception:
+        # Return cached/empty data on network error
+        return {
+            'users': {},
+            'votes': {},
+            'votes_revealed': False
+        }
 
 def cast_vote(session_code, username, vote):
     """Record a vote"""
-    supabase.table('votes').upsert({
-        'session_code': session_code,
-        'username': username,
-        'vote': vote
-    }, on_conflict='session_code,username').execute()
+    try:
+        supabase.table('votes').upsert({
+            'session_code': session_code,
+            'username': username,
+            'vote': vote
+        }, on_conflict='session_code,username').execute()
+    except Exception:
+        st.error("Failed to record vote. Please try again.")
 
 def clear_votes(session_code):
     """Clear all votes for a session"""
-    supabase.table('votes').delete().eq('session_code', session_code).execute()
-    supabase.table('sessions').update({'votes_revealed': False}).eq('code', session_code).execute()
+    try:
+        supabase.table('votes').delete().eq('session_code', session_code).execute()
+        supabase.table('sessions').update({'votes_revealed': False}).eq('code', session_code).execute()
+    except Exception:
+        st.error("Failed to clear votes. Please try again.")
 
 def reveal_votes(session_code):
     """Set votes as revealed"""
-    supabase.table('sessions').update({'votes_revealed': True}).eq('code', session_code).execute()
+    try:
+        supabase.table('sessions').update({'votes_revealed': True}).eq('code', session_code).execute()
+    except Exception:
+        pass
 
 def kick_user(session_code, username):
     """Remove a user from the session"""
-    supabase.table('session_users').delete().eq('session_code', session_code).eq('username', username).execute()
-    supabase.table('votes').delete().eq('session_code', session_code).eq('username', username).execute()
+    try:
+        supabase.table('session_users').delete().eq('session_code', session_code).eq('username', username).execute()
+        supabase.table('votes').delete().eq('session_code', session_code).eq('username', username).execute()
+    except Exception:
+        st.error("Failed to remove user. Please try again.")
 
 def leave_session(session_code, username):
     """Current user leaves the session"""
-    supabase.table('session_users').delete().eq('session_code', session_code).eq('username', username).execute()
-    supabase.table('votes').delete().eq('session_code', session_code).eq('username', username).execute()
+    try:
+        supabase.table('session_users').delete().eq('session_code', session_code).eq('username', username).execute()
+        supabase.table('votes').delete().eq('session_code', session_code).eq('username', username).execute()
+    except Exception:
+        pass  # Still allow leaving locally
 
 def all_voters_voted(session_data):
     """Check if all voters have voted"""
@@ -583,9 +615,9 @@ if random.random() < 0.1:  # 10% chance to avoid running every time
 
 st.markdown("<h1>✦ Nubs x Claude</h1>", unsafe_allow_html=True)
 
-# Auto-refresh for real-time updates (every 3 seconds when in session)
+# Auto-refresh for real-time updates (every 5 seconds when in session)
 if st.session_state.current_session:
-    st_autorefresh(interval=3000, limit=None, key="session_refresh")
+    st_autorefresh(interval=5000, limit=None, key="session_refresh")
 
 if st.session_state.current_session is None:
     # HOME SCREEN
