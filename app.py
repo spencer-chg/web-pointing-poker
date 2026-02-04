@@ -40,9 +40,15 @@ st.markdown("""
         padding-top: 0 !important;
     }
 
-    /* Moderate spacing */
+    /* Tighter consistent spacing */
     [data-testid="stVerticalBlock"] {
+        gap: 0.35rem !important;
+    }
+
+    /* Columns should have minimal gap */
+    [data-testid="stHorizontalBlock"] {
         gap: 0.5rem !important;
+        margin-bottom: 0 !important;
     }
 
     /* All text should be dark by default */
