@@ -244,21 +244,25 @@ st.markdown("""
 
     /* Participant badges */
     .participant-list {
-        display: flex;
-        flex-wrap: wrap;
+        display: grid;
+        grid-template-columns: repeat(3, 1fr);
         gap: 6px;
-        justify-content: center;
         margin: 2px 0 0 0;
     }
 
     .user-badge {
-        display: inline-flex;
+        display: flex;
         align-items: center;
+        justify-content: center;
         gap: 4px;
-        padding: 5px 10px;
-        border-radius: 14px;
+        padding: 6px 8px;
+        border-radius: 8px;
         font-weight: 500;
-        font-size: 13px;
+        font-size: 12px;
+        text-align: center;
+        white-space: nowrap;
+        overflow: hidden;
+        text-overflow: ellipsis;
     }
 
     .user-badge.voted {
