@@ -211,7 +211,7 @@ st.markdown("""
         flex-wrap: wrap;
         gap: 6px;
         justify-content: center;
-        margin: 4px 0;
+        margin: 2px 0 0 0;
     }
 
     .user-badge {
@@ -243,9 +243,10 @@ st.markdown("""
     .stats-card {
         background: white;
         border-radius: 10px;
-        padding: 12px 8px;
+        padding: 10px 8px;
         text-align: center;
         border: 1px solid #ECEAE5;
+        margin-top: 6px;
     }
 
     .stat-value {
@@ -293,7 +294,7 @@ st.markdown("""
         border: none;
         height: 1px;
         background: #E8E6E1;
-        margin: 10px 0;
+        margin: 12px 0;
     }
 
     /* Section headers */
@@ -303,7 +304,7 @@ st.markdown("""
         color: #8C8C8C !important;
         text-transform: uppercase;
         letter-spacing: 0.05em;
-        margin: 4px 0 6px 0;
+        margin: 0 0 6px 0;
         text-align: center;
     }
 
