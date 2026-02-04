@@ -72,9 +72,9 @@ st.markdown("""
         justify-content: center !important;
     }
 
-    /* All buttons - base style */
+    /* All buttons - base style (primary) */
     .stButton > button {
-        background-color: #7A8F7C !important;
+        background-color: #4A6B4D !important;
         color: white !important;
         border: none !important;
         border-radius: 10px !important;
@@ -90,22 +90,22 @@ st.markdown("""
     }
 
     .stButton > button:hover {
-        background-color: #6B7F6D !important;
+        background-color: #3D5A40 !important;
         border: none !important;
     }
 
     .stButton > button:active {
-        background-color: #5C6F5E !important;
+        background-color: #324A34 !important;
     }
 
-    /* Secondary buttons */
+    /* Secondary buttons - light with dark text */
     .stButton > button[kind="secondary"] {
         background-color: #E8EBE8 !important;
-        color: #4A4A4A !important;
+        color: #3D3D3D !important;
     }
 
     .stButton > button[kind="secondary"]:hover {
-        background-color: #DDE0DD !important;
+        background-color: #DCDCDC !important;
     }
 
     /* Vote buttons in columns - fill their column */
@@ -246,17 +246,17 @@ st.markdown("""
 
     .user-badge.voted {
         background-color: #E5EDE4;
-        color: #5C7A59;
+        color: #3D5A3D;
     }
 
     .user-badge.waiting {
         background-color: #ECEAE5;
-        color: #8C8C8C;
+        color: #666666;
     }
 
     .user-badge.observer {
         background-color: #E5ECF0;
-        color: #5C7A8A;
+        color: #3D5A6A;
     }
 
     /* Stats cards */
@@ -283,10 +283,10 @@ st.markdown("""
         letter-spacing: 0.04em;
     }
 
-    /* Consensus colors */
-    .consensus-high { color: #6B8F68; }
-    .consensus-medium { color: #C4A55A; }
-    .consensus-low { color: #C4877A; }
+    /* Consensus colors - accessible on white */
+    .consensus-high { color: #3D6B3A; }
+    .consensus-medium { color: #8B7332; }
+    .consensus-low { color: #A65D50; }
 
     /* Vote results */
     .vote-result {
