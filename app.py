@@ -74,7 +74,7 @@ st.markdown("""
 
     /* All buttons - base style */
     .stButton > button {
-        background-color: #8BA888 !important;
+        background-color: #7A8F7C !important;
         color: white !important;
         border: none !important;
         border-radius: 10px !important;
@@ -90,22 +90,22 @@ st.markdown("""
     }
 
     .stButton > button:hover {
-        background-color: #7A9A77 !important;
+        background-color: #6B7F6D !important;
         border: none !important;
     }
 
     .stButton > button:active {
-        background-color: #6B8B68 !important;
+        background-color: #5C6F5E !important;
     }
 
     /* Secondary buttons */
     .stButton > button[kind="secondary"] {
-        background-color: #ECEAE5 !important;
+        background-color: #E8EBE8 !important;
         color: #4A4A4A !important;
     }
 
     .stButton > button[kind="secondary"]:hover {
-        background-color: #E0DED9 !important;
+        background-color: #DDE0DD !important;
     }
 
     /* Vote buttons in columns - fill their column */
@@ -116,6 +116,20 @@ st.markdown("""
         font-size: 14px !important;
         font-weight: 600 !important;
         height: 38px !important;
+    }
+
+    /* Leave session - subtle text style */
+    .leave-btn button {
+        background: transparent !important;
+        color: #999 !important;
+        font-size: 13px !important;
+        height: auto !important;
+        padding: 8px !important;
+    }
+
+    .leave-btn button:hover {
+        background: transparent !important;
+        color: #666 !important;
     }
 
     /* Text inputs - comprehensive fix */
@@ -199,7 +213,7 @@ st.markdown("""
 
     /* Session code display */
     .session-code {
-        background: linear-gradient(135deg, #C8BFD6 0%, #B5C9D3 100%);
+        background: #6B7C6E;
         color: white;
         padding: 10px 18px;
         border-radius: 10px;
@@ -208,7 +222,7 @@ st.markdown("""
         text-align: center;
         letter-spacing: 3px;
         margin: 6px auto;
-        max-width: 150px;
+        max-width: 140px;
     }
 
     /* Participant badges */
