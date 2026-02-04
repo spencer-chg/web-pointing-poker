@@ -27,13 +27,21 @@ st.markdown("""
     }
 
     .main .block-container {
-        padding: 1rem 1rem 1.5rem 1rem !important;
+        padding: 0.5rem 1rem 1rem 1rem !important;
         max-width: 420px;
+    }
+
+    /* Kill the top margin on first element */
+    .block-container > div:first-child,
+    .stMarkdown:first-child,
+    [data-testid="stVerticalBlock"] > div:first-child {
+        margin-top: 0 !important;
+        padding-top: 0 !important;
     }
 
     /* Moderate spacing */
     [data-testid="stVerticalBlock"] {
-        gap: 0.6rem !important;
+        gap: 0.5rem !important;
     }
 
     /* All text should be dark by default */
