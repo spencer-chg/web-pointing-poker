@@ -103,17 +103,17 @@ st.markdown("""
         -webkit-text-fill-color: white !important;
     }
 
-    /* Secondary buttons - light with dark text */
+    /* Secondary buttons - light sage tint */
     .stButton > button[kind="secondary"] {
-        background-color: #E8EBE8 !important;
-        color: #2D2D2D !important;
-        -webkit-text-fill-color: #2D2D2D !important;
+        background-color: #E5EEE6 !important;
+        color: #3D5A3D !important;
+        -webkit-text-fill-color: #3D5A3D !important;
     }
 
     .stButton > button[kind="secondary"]:hover {
-        background-color: #DCDCDC !important;
-        color: #2D2D2D !important;
-        -webkit-text-fill-color: #2D2D2D !important;
+        background-color: #D8E5D9 !important;
+        color: #3D5A3D !important;
+        -webkit-text-fill-color: #3D5A3D !important;
     }
 
     /* Vote buttons in columns - fill their column */
@@ -128,7 +128,7 @@ st.markdown("""
     }
 
     [data-testid="column"] .stButton > button[kind="secondary"] {
-        -webkit-text-fill-color: #2D2D2D !important;
+        -webkit-text-fill-color: #3D5A3D !important;
     }
 
     /* Leave session - subtle text style */
@@ -242,7 +242,7 @@ st.markdown("""
         font-weight: 600;
         text-align: center;
         letter-spacing: 3px;
-        margin: 6px auto;
+        margin: 6px auto 14px auto;
         max-width: 140px;
     }
 
@@ -478,7 +478,7 @@ def calculate_stats(votes):
         return None
     numeric_votes = [float(v) for v in votes.values() if v != "?"]
     if not numeric_votes:
-        return {'most_common': "?", 'average': None, 'consensus': "—"}
+        return {'most_common': "?", 'average': None, 'consensus': "—", 'consensus_class': ""}
 
     vote_counts = {}
     for vote in votes.values():
