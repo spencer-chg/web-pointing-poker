@@ -513,45 +513,67 @@ if st.session_state.current_session is None:
     # HOME SCREEN
     st.markdown("<p class='tagline'>Estimate together, align faster</p>", unsafe_allow_html=True)
 
-    if st.button("Create New Session", use_container_width=True):
-        code = create_session()
-        st.session_state.temp_session_code = code
-        st.rerun()
-
-    st.markdown("<p class='section-header'>Or join existing</p>", unsafe_allow_html=True)
-
-    join_code = st.text_input("Session Code", max_chars=4, placeholder="ABCD").upper()
-
-    if join_code or 'temp_session_code' in st.session_state:
-        code_to_join = join_code if join_code else st.session_state.get('temp_session_code', '')
-
-        if 'temp_session_code' in st.session_state and not join_code:
-            st.markdown(f"<div class='session-code'>{code_to_join}</div>", unsafe_allow_html=True)
-            st.markdown("<p class='helper-text'>Share this code with your team</p>", unsafe_allow_html=True)
+    # Check if we just created a session
+    if 'temp_session_code' in st.session_state:
+        # CREATED SESSION - just need name to join
+        code_to_join = st.session_state.temp_session_code
+        st.markdown(f"<div class='session-code'>{code_to_join}</div>", unsafe_allow_html=True)
+        st.markdown("<p class='helper-text'>Share this code with your team</p>", unsafe_allow_html=True)
 
         username = st.text_input("Your Name", value=st.session_state.last_username, placeholder="Enter your name", key="join_username")
 
         if st.button("Join as Voter", use_container_width=True, type="primary"):
             if username:
                 if join_session(code_to_join, username, False):
-                    if 'temp_session_code' in st.session_state:
-                        del st.session_state.temp_session_code
+                    del st.session_state.temp_session_code
                     st.rerun()
-                else:
-                    st.error("Session not found")
             else:
                 st.warning("Please enter your name")
 
         if st.button("Join as Observer", use_container_width=True, type="secondary"):
             if username:
                 if join_session(code_to_join, username, True):
-                    if 'temp_session_code' in st.session_state:
-                        del st.session_state.temp_session_code
+                    del st.session_state.temp_session_code
                     st.rerun()
-                else:
-                    st.error("Session not found")
             else:
                 st.warning("Please enter your name")
+
+        st.markdown("---")
+        if st.button("Cancel", use_container_width=True, type="secondary"):
+            del st.session_state.temp_session_code
+            st.rerun()
+
+    else:
+        # LANDING - create or join
+        if st.button("Create New Session", use_container_width=True):
+            code = create_session()
+            st.session_state.temp_session_code = code
+            st.rerun()
+
+        st.markdown("<p class='section-header'>Or join existing</p>", unsafe_allow_html=True)
+
+        join_code = st.text_input("Session Code", max_chars=4, placeholder="ABCD").upper()
+
+        if join_code:
+            username = st.text_input("Your Name", value=st.session_state.last_username, placeholder="Enter your name", key="join_username")
+
+            if st.button("Join as Voter", use_container_width=True, type="primary"):
+                if username:
+                    if join_session(join_code, username, False):
+                        st.rerun()
+                    else:
+                        st.error("Session not found")
+                else:
+                    st.warning("Please enter your name")
+
+            if st.button("Join as Observer", use_container_width=True, type="secondary"):
+                if username:
+                    if join_session(join_code, username, True):
+                        st.rerun()
+                    else:
+                        st.error("Session not found")
+                else:
+                    st.warning("Please enter your name")
 
 else:
     # SESSION SCREEN
