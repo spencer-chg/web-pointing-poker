@@ -103,17 +103,17 @@ st.markdown("""
         -webkit-text-fill-color: white !important;
     }
 
-    /* Secondary buttons - light sage tint */
+    /* Secondary buttons - soft sage with charcoal text */
     .stButton > button[kind="secondary"] {
-        background-color: #E5EEE6 !important;
-        color: #3D5A3D !important;
-        -webkit-text-fill-color: #3D5A3D !important;
+        background-color: #E9EEE9 !important;
+        color: #444444 !important;
+        -webkit-text-fill-color: #444444 !important;
     }
 
     .stButton > button[kind="secondary"]:hover {
-        background-color: #D8E5D9 !important;
-        color: #3D5A3D !important;
-        -webkit-text-fill-color: #3D5A3D !important;
+        background-color: #DCE3DC !important;
+        color: #333333 !important;
+        -webkit-text-fill-color: #333333 !important;
     }
 
     /* Vote buttons in columns - fill their column */
@@ -128,7 +128,7 @@ st.markdown("""
     }
 
     [data-testid="column"] .stButton > button[kind="secondary"] {
-        -webkit-text-fill-color: #3D5A3D !important;
+        -webkit-text-fill-color: #444444 !important;
     }
 
     /* Leave session - subtle text style */
