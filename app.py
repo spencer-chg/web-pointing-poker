@@ -27,7 +27,8 @@ st.markdown("""
     }
 
     .main .block-container {
-        padding: 0.5rem 1rem 1rem 1rem !important;
+        padding: 0.25rem 1rem 1rem 1rem !important;
+        margin-top: -1rem !important;
         max-width: 420px;
     }
 
@@ -332,6 +333,20 @@ st.markdown("""
     footer {visibility: hidden;}
     header {visibility: hidden;}
     .stDeployButton {display: none;}
+
+    /* Nuclear option for top padding */
+    .stApp > header {
+        height: 0 !important;
+        min-height: 0 !important;
+    }
+
+    section[data-testid="stSidebar"] + div {
+        padding-top: 0 !important;
+    }
+
+    .appview-container {
+        padding-top: 0 !important;
+    }
 
     /* Fix column gaps */
     [data-testid="column"] {
