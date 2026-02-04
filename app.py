@@ -410,6 +410,17 @@ if 'is_observer' not in st.session_state:
 if 'last_username' not in st.session_state:
     st.session_state.last_username = ""
 
+# Check URL params for session persistence
+query_params = st.query_params
+if st.session_state.current_session is None and 'session' in query_params and 'user' in query_params:
+    code = query_params['session']
+    username = query_params['user']
+    is_obs = query_params.get('observer', 'false') == 'true'
+    # Verify session still exists and rejoin
+    if session_exists(code):
+        # Rejoin the session
+        join_session(code, username, is_obs)
+
 # Voting options
 VOTE_OPTIONS = ["0.5", "1", "2", "3", "5", "8", "13", "?"]
 
@@ -451,6 +462,12 @@ def join_session(code, username, is_observer):
     st.session_state.user_name = username
     st.session_state.is_observer = is_observer
     st.session_state.last_username = username
+
+    # Set URL params for persistence across refresh
+    st.query_params['session'] = code
+    st.query_params['user'] = username
+    if is_observer:
+        st.query_params['observer'] = 'true'
     return True
 
 def get_session_data(code):
@@ -718,4 +735,5 @@ else:
         st.session_state.current_session = None
         st.session_state.user_name = None
         st.session_state.is_observer = None
+        st.query_params.clear()
         st.rerun()
