@@ -253,31 +253,50 @@ st.markdown("""
     .user-badge {
         display: flex;
         align-items: center;
-        justify-content: center;
-        gap: 4px;
-        padding: 6px 8px;
+        justify-content: space-between;
+        padding: 8px 10px;
         border-radius: 8px;
         font-weight: 500;
         font-size: 12px;
-        text-align: center;
-        white-space: nowrap;
+        background-color: #F5F5F3;
+        color: #555;
+    }
+
+    .user-badge .name {
         overflow: hidden;
         text-overflow: ellipsis;
+        white-space: nowrap;
+    }
+
+    .user-badge .status-dot {
+        width: 8px;
+        height: 8px;
+        border-radius: 50%;
+        flex-shrink: 0;
+        margin-left: 6px;
     }
 
     .user-badge.voted {
-        background-color: #E5EDE4;
+        background-color: #EDF5ED;
         color: #3D5A3D;
     }
 
-    .user-badge.waiting {
-        background-color: #ECEAE5;
-        color: #666666;
+    .user-badge.voted .status-dot {
+        background-color: #5A9E5A;
+    }
+
+    .user-badge.waiting .status-dot {
+        background-color: #D0D0D0;
     }
 
     .user-badge.observer {
-        background-color: #E5ECF0;
-        color: #3D5A6A;
+        background-color: #EDF2F5;
+        color: #4A6070;
+    }
+
+    .user-badge.observer .status-dot {
+        background-color: transparent;
+        border: 1.5px solid #8AA0B0;
     }
 
     /* Stats cards */
@@ -742,8 +761,7 @@ else:
         for user in voters:
             voted = user in session['votes']
             cls = "voted" if voted else "waiting"
-            icon = "✓" if voted else "···"
-            badges += f"<span class='user-badge {cls}'>{user} {icon}</span>"
+            badges += f"<span class='user-badge {cls}'><span class='name'>{user}</span><span class='status-dot'></span></span>"
         badges += "</div>"
         st.markdown(badges, unsafe_allow_html=True)
     else:
@@ -752,7 +770,7 @@ else:
     if observers:
         obs_badges = "<div class='participant-list'>"
         for user in observers:
-            obs_badges += f"<span class='user-badge observer'>{user} 👁</span>"
+            obs_badges += f"<span class='user-badge observer'><span class='name'>{user}</span><span class='status-dot'></span></span>"
         obs_badges += "</div>"
         st.markdown(obs_badges, unsafe_allow_html=True)
 
