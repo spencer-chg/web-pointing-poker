@@ -46,6 +46,8 @@ st.markdown("""
         padding: 0.25rem 1rem 1rem 1rem !important;
         margin-top: -1rem !important;
         max-width: 420px;
+        margin-left: auto !important;
+        margin-right: auto !important;
     }
 
     /* Kill the top margin on first element */
@@ -77,9 +79,10 @@ st.markdown("""
         font-weight: 600 !important;
         font-size: 1.5rem !important;
         color: #3D3D3D !important;
-        text-align: center;
+        text-align: center !important;
         letter-spacing: -0.02em;
         margin: 0 0 0.25rem 0 !important;
+        width: 100% !important;
     }
 
     /* Buttons - centered container */
