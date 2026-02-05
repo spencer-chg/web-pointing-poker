@@ -75,6 +75,16 @@ st.markdown("""
     }
 
     /* Title */
+    .app-title {
+        font-weight: 600;
+        font-size: 1.5rem;
+        color: #3D3D3D;
+        text-align: center;
+        letter-spacing: -0.02em;
+        margin: 0 0 0.25rem 0;
+        width: 100%;
+    }
+
     h1 {
         font-weight: 600 !important;
         font-size: 1.5rem !important;
@@ -645,7 +655,7 @@ if st.session_state.current_session is None and 'session' in query_params and 'u
 if random.random() < 0.1:  # 10% chance to avoid running every time
     cleanup_old_sessions()
 
-st.markdown("<h1>✦ Nubs x Claude ✦</h1>", unsafe_allow_html=True)
+st.markdown("<div class='app-title'>✦ Nubs x Claude ✦</div>", unsafe_allow_html=True)
 
 # Auto-refresh for real-time updates (every 5 seconds when in session)
 if st.session_state.current_session:
