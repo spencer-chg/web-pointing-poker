@@ -645,7 +645,7 @@ if st.session_state.current_session is None and 'session' in query_params and 'u
 if random.random() < 0.1:  # 10% chance to avoid running every time
     cleanup_old_sessions()
 
-st.markdown("<h1>✦ Nubs x Claude</h1>", unsafe_allow_html=True)
+st.markdown("<h1>✦ Nubs x Claude ✦</h1>", unsafe_allow_html=True)
 
 # Auto-refresh for real-time updates (every 5 seconds when in session)
 if st.session_state.current_session:
