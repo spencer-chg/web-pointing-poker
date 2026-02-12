@@ -826,9 +826,11 @@ else:
                 reveal_votes(st.session_state.current_session)
                 st.rerun()
 
-        if st.button("Clear Votes", use_container_width=True):
-            clear_votes(st.session_state.current_session)
-            st.rerun()
+        clear_type = "primary" if has_votes else "secondary"
+        if st.button("Clear Votes", use_container_width=True, type=clear_type, disabled=not has_votes):
+            if has_votes:
+                clear_votes(st.session_state.current_session)
+                st.rerun()
 
         users_to_kick = [u for u in session['users'] if u != st.session_state.user_name]
         if users_to_kick:
