@@ -145,6 +145,7 @@ st.markdown("""
         -webkit-text-fill-color: #333333 !important;
     }
 
+
 /* Vote buttons in columns - fill their column */
     [data-testid="column"] .stButton > button {
         max-width: none !important;
@@ -839,14 +840,28 @@ else:
                 kick_user(st.session_state.current_session, user_to_kick)
                 st.rerun()
 
-    # Leave button - smaller and centered to visually differentiate
+    # Leave button - muted blue, narrower
     st.markdown("<div style='margin-top: 12px;'></div>", unsafe_allow_html=True)
     _, leave_col, _ = st.columns([1, 1, 1])
     with leave_col:
-        if st.button("Leave Session", use_container_width=True, type="secondary"):
+        if st.button("Leave Session", use_container_width=True, type="secondary", key="leave_session_btn"):
             leave_session(st.session_state.current_session, st.session_state.user_name)
             st.session_state.current_session = None
             st.session_state.user_name = None
             st.session_state.is_observer = None
             st.query_params.clear()
             st.rerun()
+
+    # Style the Leave button as muted blue
+    st.markdown("""
+    <script>
+    const buttons = window.parent.document.querySelectorAll('button[kind="secondary"]');
+    buttons.forEach(btn => {
+        if (btn.textContent.trim() === 'Leave Session') {
+            btn.style.backgroundColor = '#4A5F6B';
+            btn.style.color = 'white';
+            btn.style.webkitTextFillColor = 'white';
+        }
+    });
+    </script>
+    """, unsafe_allow_html=True)
