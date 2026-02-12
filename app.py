@@ -817,9 +817,11 @@ else:
     if st.session_state.is_observer:
         st.markdown("<p class='section-header'>Controls</p>", unsafe_allow_html=True)
 
-        # Reveal Now button - show when there are votes but they haven't been revealed yet
-        if not votes_revealed and session['votes']:
-            if st.button("Reveal Now", use_container_width=True, type="primary"):
+        # Reveal Now button - always visible, disabled until votes exist
+        has_votes = bool(session['votes'])
+        can_reveal = has_votes and not votes_revealed
+        if st.button("Reveal Now", use_container_width=True, type="primary", disabled=not can_reveal):
+            if can_reveal:
                 reveal_votes(st.session_state.current_session)
                 st.rerun()
 
