@@ -1,4 +1,5 @@
 import streamlit as st
+import streamlit.components.v1 as components
 import random
 import string
 import statistics
@@ -852,16 +853,16 @@ else:
             st.query_params.clear()
             st.rerun()
 
-    # Style the Leave button as muted blue
-    st.markdown("""
+    # Style the Leave button as muted blue via components iframe (JS actually executes here)
+    components.html("""
     <script>
     const buttons = window.parent.document.querySelectorAll('button[kind="secondary"]');
     buttons.forEach(btn => {
         if (btn.textContent.trim() === 'Leave Session') {
-            btn.style.backgroundColor = '#4A5F6B';
-            btn.style.color = 'white';
-            btn.style.webkitTextFillColor = 'white';
+            btn.style.setProperty('background-color', '#4A5F6B', 'important');
+            btn.style.setProperty('color', 'white', 'important');
+            btn.style.setProperty('-webkit-text-fill-color', 'white', 'important');
         }
     });
     </script>
-    """, unsafe_allow_html=True)
+    """, height=0)
