@@ -145,6 +145,24 @@ st.markdown("""
         -webkit-text-fill-color: #333333 !important;
     }
 
+    /* Leave button - tertiary text-link style */
+    .leave-btn .stButton > button {
+        background-color: transparent !important;
+        color: #999999 !important;
+        -webkit-text-fill-color: #999999 !important;
+        font-weight: 400 !important;
+        font-size: 13px !important;
+        text-decoration: underline !important;
+        height: auto !important;
+        padding: 6px 18px !important;
+    }
+
+    .leave-btn .stButton > button:hover {
+        background-color: transparent !important;
+        color: #666666 !important;
+        -webkit-text-fill-color: #666666 !important;
+    }
+
     /* Vote buttons in columns - fill their column */
     [data-testid="column"] .stButton > button {
         max-width: none !important;
@@ -839,11 +857,14 @@ else:
                 kick_user(st.session_state.current_session, user_to_kick)
                 st.rerun()
 
-    # Leave button
-    if st.button("Leave Session", use_container_width=True, type="secondary"):
-        leave_session(st.session_state.current_session, st.session_state.user_name)
-        st.session_state.current_session = None
-        st.session_state.user_name = None
-        st.session_state.is_observer = None
-        st.query_params.clear()
-        st.rerun()
+    # Leave button - tertiary style
+    with st.container():
+        st.markdown("<div class='leave-btn'>", unsafe_allow_html=True)
+        if st.button("Leave Session", use_container_width=True, type="secondary"):
+            leave_session(st.session_state.current_session, st.session_state.user_name)
+            st.session_state.current_session = None
+            st.session_state.user_name = None
+            st.session_state.is_observer = None
+            st.query_params.clear()
+            st.rerun()
+        st.markdown("</div>", unsafe_allow_html=True)
