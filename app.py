@@ -532,32 +532,27 @@ def join_session(code, username, is_observer, force_rejoin=False):
     return "success"
 
 def get_session_data(code):
-    """Fetch all data for a session"""
+    """Fetch all data for a session in a single DB call via RPC"""
     try:
-        # Get users
-        users_result = supabase.table('session_users').select('*').eq('session_code', code).execute()
-        users = {u['username']: {'is_observer': u['is_observer']} for u in users_result.data}
-
-        # Get votes
-        votes_result = supabase.table('votes').select('*').eq('session_code', code).execute()
-        votes = {v['username']: v['vote'] for v in votes_result.data}
-
-        # Get session info
-        session_result = supabase.table('sessions').select('*').eq('code', code).execute()
-        votes_revealed = session_result.data[0]['votes_revealed'] if session_result.data else False
-
+        result = supabase.rpc('get_session_data', {'session_code_param': code}).execute()
+        data = result.data if result.data else {}
         return {
-            'users': users,
-            'votes': votes,
-            'votes_revealed': votes_revealed
+            'users': data.get('users') or {},
+            'votes': data.get('votes') or {},
+            'votes_revealed': data.get('votes_revealed', False)
         }
     except Exception:
-        # Return cached/empty data on network error
-        return {
-            'users': {},
-            'votes': {},
-            'votes_revealed': False
-        }
+        # Fallback to individual queries if RPC not available
+        try:
+            users_result = supabase.table('session_users').select('*').eq('session_code', code).execute()
+            users = {u['username']: {'is_observer': u['is_observer']} for u in users_result.data}
+            votes_result = supabase.table('votes').select('*').eq('session_code', code).execute()
+            votes = {v['username']: v['vote'] for v in votes_result.data}
+            session_result = supabase.table('sessions').select('*').eq('code', code).execute()
+            votes_revealed = session_result.data[0]['votes_revealed'] if session_result.data else False
+            return {'users': users, 'votes': votes, 'votes_revealed': votes_revealed}
+        except Exception:
+            return {'users': {}, 'votes': {}, 'votes_revealed': False}
 
 def cast_vote(session_code, username, vote):
     """Record a vote"""
@@ -651,9 +646,10 @@ if st.session_state.current_session is None and 'session' in query_params and 'u
 
 # ========== MAIN APP ==========
 
-# Cleanup old sessions on load (runs occasionally)
-if random.random() < 0.1:  # 10% chance to avoid running every time
+# Cleanup old sessions once per user session, not on every auto-refresh
+if 'cleanup_done' not in st.session_state:
     cleanup_old_sessions()
+    st.session_state.cleanup_done = True
 
 st.markdown("<div class='app-title'>✦ Nubs x Claude ✦</div>", unsafe_allow_html=True)
 
@@ -746,10 +742,10 @@ else:
     st.markdown(f"<div class='session-code'>{st.session_state.current_session}</div>", unsafe_allow_html=True)
 
     all_voted = all_voters_voted(session)
-    votes_revealed = session['votes_revealed'] or all_voted
+    votes_revealed = session['votes_revealed']
 
-    # Auto-reveal when all voted
-    if all_voted and not session['votes_revealed']:
+    # Auto-reveal when all voted (only write once, not every refresh)
+    if all_voted and not votes_revealed:
         reveal_votes(st.session_state.current_session)
         votes_revealed = True
 
